@@ -1,0 +1,43 @@
+#!/usr/bin/python3
+
+import sys
+from sympy import isprime, primerange
+
+def factorize(n):
+    """
+    Factorize the given number into two prime numbers.
+
+    Args:
+        n (int): The number to be factorized.
+
+    Returns:
+        Tuple[int, int]: A tuple containing two prime numbers.
+    """
+    for p in primerange(2, n):
+        q, r = divmod(n, p)
+        if r == 0 and isprime(q):
+            return p, q
+    return None, None
+
+def main():
+    """
+    Main function to read an RSA number from a file and factorize it.
+    """
+    if len(sys.argv) != 2:
+        print("Usage: python rsa.py <filename>")
+        sys.exit(1)
+
+    filename = sys.argv[1]
+
+    with open(filename, 'r') as file:
+        rsa_number = int(file.readline().strip())
+
+    p, q = factorize(rsa_number)
+
+    if p is not None and q is not None:
+        print(f"{rsa_number}={p}*{q}")
+    else:
+        print(f"Unable to factorize {rsa_number}")
+
+if __name__ == "__main__":
+    main()
